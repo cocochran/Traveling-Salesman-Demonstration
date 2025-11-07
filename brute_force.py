@@ -1,16 +1,7 @@
 from itertools import permutations
-from random import random
 from city import *
 import math
 
-def generate_cities(n: int):
-    cities = []
-    
-    for i in range(0, n):
-        city = City(i, random(), random())
-        cities.append(city)
-
-    return cities
 
 def distance(cities: list[City]) -> float:
     distance = 0.0
