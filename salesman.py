@@ -6,7 +6,12 @@ class Salesman:
         self.y = array_of_cities[self.current].y
 
     def advance(self):
+        self.current += 1
         if self.current < len(self.array_of_cities):
-            self.current += 1
             self.x = self.array_of_cities[self.current].x
             self.y = self.array_of_cities[self.current].y
+            if self.current == len(self.array_of_cities) - 1:
+                self.x = self.array_of_cities[0].x
+                self.y = self.array_of_cities[0].y
+            
+
