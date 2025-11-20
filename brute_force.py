@@ -18,15 +18,17 @@ def determine_optimal_path(cities: list[City]) -> list[City]:
     ##Get all permutations
     city_permutations = list(permutations(cities))
     
-    shortest_path = city_permutations[0]
+    shortest_path = list(city_permutations[0])
     shortest_distance = distance(shortest_path)
 
     ##Check the distance of all permutations, and return the one with the shortest distance.
     for i in range(1, len(city_permutations)):
         current_distance = distance(city_permutations[i])
         if shortest_distance > current_distance:
-            shortest_path = city_permutations[i]
+            shortest_path = list(city_permutations[i])
             shortest_distance = current_distance
+    
+    shortest_path.append(shortest_path[0])
 
     return shortest_path
 
