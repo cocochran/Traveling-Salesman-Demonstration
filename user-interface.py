@@ -135,8 +135,8 @@ def main():
     height = 720
     city_count = 5
     model = TSPModel(width, height, city_count)
-    view = TSPView(model, width, height)
-    controller = TSPController(controller)
+    controller = TSPController(model)
+    view = TSPView(controller, width, height)
 
 
 
