@@ -14,22 +14,18 @@ class TSPModel:
     def __init__(self, width, height, city_count):
         self.width = width
         self.height = height
-        self.mode = Mode.GREEDY
+        self.mode = Mode.BRUTE_FORCE
         self.city_count = city_count
         self.cities = generate_cities(self.city_count, self.width * 0.9, self.height * 0.9)
         #Salesman is not accessible until after the simulation has begun
-
-    
-        
-        
-
+        self.salesman = None
 
 class TSPView:
     def __init__(self, controller, width, height):
         
         #Make game window
         pygame.init()
-        self.model = model
+        self.controller = controller
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
         self.canvas = pygame.surface.Surface((width / 2, height / 2))
@@ -76,7 +72,7 @@ class TSPView:
         
 
         #Cities are the list of cities *in order*.
-        cities = list(self.model.cities)
+        cities = list(self.controller.cities)
         font_size = 12
         font = pygame.font.SysFont('timesnewroman',  font_size)
         for i in range(0, len(cities)):
@@ -102,8 +98,8 @@ class TSPView:
             self.screen.blit(city_label, (cities[i].x + x_offset, cities[i].y + y_offset))
     
     def draw_path(self):
-        cities = self.model.cities 
-        salesman_pos = self.model.salesman.current
+        cities = self.controller.cities 
+        salesman_pos = self.controller.salesman.current
         if salesman_pos < len(cities) - 1:
             pygame.draw.line(self.screen, "red", (cities[salesman_pos].x, cities[salesman_pos].y), (cities[salesman_pos+1].x, cities[salesman_pos+1].y), 2)
         
@@ -120,7 +116,7 @@ class TSPController:
         self.cities = model.cities
     
     def start_simulation(self):
-        match self.mode:
+        match self.model.mode:
             case Mode.BRUTE_FORCE:
                 self.cities = bf.determine_optimal_path(self.cities)
             case Mode.GREEDY:
