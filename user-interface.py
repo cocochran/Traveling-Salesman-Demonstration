@@ -14,27 +14,18 @@ class TSPModel:
     def __init__(self, width, height, city_count):
         self.width = width
         self.height = height
-        self.mode = Mode.BRUTE_FORCE
+        self.mode = Mode.GREEDY
         self.city_count = city_count
         self.cities = generate_cities(self.city_count, self.width * 0.9, self.height * 0.9)
         #Salesman is not accessible until after the simulation has begun
 
-    def start_simulation(self):
-        match self.mode:
-            case Mode.BRUTE_FORCE:
-                self.cities = bf.determine_optimal_path(self.cities)
-            case Mode.GREEDY:
-                self.cities = g.determine_optimal_path(self.cities)
-            case _:
-                self.cities = bf.determine_optimal_path(self.cities)
-               
-        self.salesman = Salesman(self.cities)
+    
         
         
 
 
 class TSPView:
-    def __init__(self, model, width, height):
+    def __init__(self, controller, width, height):
         
         #Make game window
         pygame.init()
@@ -43,7 +34,7 @@ class TSPView:
         self.clock = pygame.time.Clock()
         self.canvas = pygame.surface.Surface((width / 2, height / 2))
         running = True
-        self.model.start_simulation()
+        self.controller.start_simulation()
         self.width = width
         self.height = height
 
@@ -56,7 +47,7 @@ class TSPView:
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        self.model.salesman.advance() 
+                        self.controller.salesman.advance() 
                     
 
             # fill the screen with a color to wipe away anything from last frame
@@ -64,7 +55,7 @@ class TSPView:
             self.screen.fill("white")
             self.draw_path()
             self.draw_cities()
-            pygame.draw.circle(self.screen, "red", (self.model.salesman.x, self.model.salesman.y), 10)
+            pygame.draw.circle(self.screen, "red", (self.controller.salesman.x, self.controller.salesman.y), 10)
             # RENDER YOUR GAME HERE
 
             
@@ -123,17 +114,29 @@ class TSPView:
 
 
 class TSPController:
-    def __init__(self, model, view):
-        self.model = model
-        self.view = view
+    def __init__(self, model):
+        self.model = model   
+        self.salesman = model.salesman
+        self.cities = model.cities
+    
+    def start_simulation(self):
+        match self.mode:
+            case Mode.BRUTE_FORCE:
+                self.cities = bf.determine_optimal_path(self.cities)
+            case Mode.GREEDY:
+                self.cities = g.determine_optimal_path(self.cities)
+            case _:
+                self.cities = bf.determine_optimal_path(self.cities)
+               
+        self.salesman = Salesman(self.cities)
 
 def main():
     width = 1280
     height = 720
-    city_count = 8
+    city_count = 5
     model = TSPModel(width, height, city_count)
     view = TSPView(model, width, height)
-    controller = TSPController(model, view)
+    controller = TSPController(controller)
 
 
 
