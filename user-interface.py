@@ -56,6 +56,7 @@ class TSPView:
             # fill the screen with a color to wipe away anything from last frame
             
             self.screen.fill("white")
+            self.draw_path()
             self.draw_cities()
             pygame.draw.circle(self.screen, "red", (self.model.salesman.x, self.model.salesman.y), 10)
             # RENDER YOUR GAME HERE
@@ -74,7 +75,7 @@ class TSPView:
     def draw_cities(self):
         #Define text colors
         white =  (255, 255, 255)
-        black = (0, 0, 0)
+        blue = (0, 71, 171)
         
 
         #Cities are the list of cities *in order*.
@@ -88,7 +89,7 @@ class TSPView:
             name = cities[i].identifier
 
             #Render city name.
-            city_label = font.render(f"{name}", False, black, white)   
+            city_label = font.render(f"{name}", False, blue, white)   
             pygame.draw.circle(self.screen, "black", (cities[i].x, cities[i].y), 5)
             
             #Actually render the city name.
@@ -102,6 +103,17 @@ class TSPView:
                 y_offset = -30
             
             self.screen.blit(city_label, (cities[i].x + x_offset, cities[i].y + y_offset))
+    
+    def draw_path(self):
+        cities = self.model.cities 
+        salesman_pos = self.model.salesman.current
+        if salesman_pos < len(cities) - 1:
+            pygame.draw.line(self.screen, "red", (cities[salesman_pos].x, cities[salesman_pos].y), (cities[salesman_pos+1].x, cities[salesman_pos+1].y), 2)
+        
+        else:
+            for i in range(0, len(cities) - 1):
+                pygame.draw.line(self.screen, "black", (cities[i].x, cities[i].y), (cities[i+1].x, cities[i+1].y), 2)
+
 
 
 class TSPController:
@@ -112,7 +124,7 @@ class TSPController:
 def main():
     width = 1280
     height = 720
-    city_count = 6
+    city_count = 8
     model = TSPModel(width, height, city_count)
     view = TSPView(model, width, height)
     controller = TSPController(model, view)
