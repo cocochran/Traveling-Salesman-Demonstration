@@ -19,7 +19,7 @@ def generate_cities(n: int, x_multiplier: int, y_multiplier: int):
             city = City(name, x_multiplier * random(), y_multiplier * random())
         #If no names are left, start giving them number identifiers.
         else:
-            city = City(name, x_multiplier * random(), y_multiplier * random())
+            city = City(f"{i}", x_multiplier * random(), y_multiplier * random())
 
         cities.append(city)
 

@@ -8,7 +8,7 @@ class TSPModel:
     def __init__(self, width, height, city_count):
         self.width = width
         self.height = height
-        self.mode = "Brute Force"
+        self.mode = "Greedy"
         self.city_count = city_count
         self.cities = generate_cities(self.city_count, self.width * 0.9, self.height * 0.9)
         #Salesman is not accessible until after the simulation has begun
@@ -124,7 +124,7 @@ class TSPController:
 def main():
     width = 1280
     height = 720
-    city_count = 8
+    city_count = 120
     model = TSPModel(width, height, city_count)
     view = TSPView(model, width, height)
     controller = TSPController(model, view)
