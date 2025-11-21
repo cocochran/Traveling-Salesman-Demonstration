@@ -32,7 +32,7 @@ def determine_optimal_path(cities: list[City]) -> list[City]:
     other_cities = cities[1:]
 
     shortest_path: list[City]
-    shortest_distance = float.inf
+    shortest_distance = float('inf')
 
     # Iterate over permutations
     for perm in permutations(other_cities):
