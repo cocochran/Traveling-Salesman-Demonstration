@@ -3,21 +3,27 @@ import greedy as g
 import pygame
 from city import *
 from salesman import *
-        
+from enum import Enum
+
+class Mode(Enum):
+    BRUTE_FORCE = 1
+    GREEDY = 2
+
 class TSPModel:
+    
     def __init__(self, width, height, city_count):
         self.width = width
         self.height = height
-        self.mode = "Greedy"
+        self.mode = Mode.BRUTE_FORCE
         self.city_count = city_count
         self.cities = generate_cities(self.city_count, self.width * 0.9, self.height * 0.9)
         #Salesman is not accessible until after the simulation has begun
 
     def start_simulation(self):
         match self.mode:
-            case "Brute Force":
+            case Mode.BRUTE_FORCE:
                 self.cities = bf.determine_optimal_path(self.cities)
-            case "Greedy":
+            case Mode.GREEDY:
                 self.cities = g.determine_optimal_path(self.cities)
             case _:
                 self.cities = bf.determine_optimal_path(self.cities)
@@ -124,7 +130,7 @@ class TSPController:
 def main():
     width = 1280
     height = 720
-    city_count = 120
+    city_count = 8
     model = TSPModel(width, height, city_count)
     view = TSPView(model, width, height)
     controller = TSPController(model, view)

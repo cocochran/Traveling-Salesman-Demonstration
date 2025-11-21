@@ -36,14 +36,3 @@ def determine_optimal_path(cities: list[City]) -> list[City]:
     
     return estimated_shortest_path
 
-def main():
-    cities = generate_cities(10)
-    for i in range(0, len(cities)):
-        print(f"({cities[i].x}, {cities[i].y})")
-    
-    path = determine_optimal_path(cities)
-
-    print_cities(path)
-
-if __name__ == "__main__":
-    main()

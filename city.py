@@ -11,7 +11,7 @@ def generate_cities(n: int, x_multiplier: int, y_multiplier: int):
     cities = []
     
     #Possible names to generate
-    possible_names = ["Paris", "London", "New York", "Shanghai", "Moscow", "Cape Town", "Mexico City", "Cairo", "Karnaca", "Dunwall"]
+    possible_names = ["Paris", "London", "New York", "Shanghai", "Moscow", "Cape Town", "Mexico City", "Cairo", "Singapore", "Sydney"]
     for i in range(0, n):
         #If names left, give the cities generated a name.
         if (len(possible_names) > 0):

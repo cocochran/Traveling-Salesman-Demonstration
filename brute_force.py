@@ -4,46 +4,49 @@ import math
 
 
 def distance(cities: list[City]) -> float:
-    distance = 0.0
+    total = 0.0
 
     if len(cities) > 1:
         for i in range(0, len(cities) - 1):
-            ##Check the distance between each city using the distance formula.
-            distance += math.sqrt((cities[i].x - cities[i+1].x)**2 + (cities[i].y - cities[i+1].y)**2)
-        ##Check the distance from the last city back to the first.
-        distance += math.sqrt((cities[0].x - cities[-1].x)**2 + (cities[0].y - cities[-1].y)**2)
-    return distance
+            dx = cities[i].x - cities[i + 1].x
+            dy = cities[i].y - cities[i + 1].y
+            total += math.sqrt(dx * dx + dy * dy)
+        # Return to start
+        dx = cities[0].x - cities[-1].x
+        dy = cities[0].y - cities[-1].y
+        total += math.sqrt(dx * dx + dy * dy)
+
+    return total
+
 
 def determine_optimal_path(cities: list[City]) -> list[City]:
-    ##Get all permutations
-    city_permutations = list(permutations(cities))
-    
-    shortest_path = list(city_permutations[0])
-    shortest_distance = distance(shortest_path)
+    n = len(cities)
 
-    ##Check the distance of all permutations, and return the one with the shortest distance.
-    for i in range(1, len(city_permutations)):
-        current_distance = distance(city_permutations[i])
-        if shortest_distance > current_distance:
-            shortest_path = list(city_permutations[i])
+    if n <= 1:
+        # Nothing to optimize, just return copy
+        return cities.copy()
+
+    # Fix the starting city
+    start = cities[0]
+    #Rest of the cities in new list
+    other_cities = cities[1:]
+
+    shortest_path: list[City]
+    shortest_distance = float.inf
+
+    # Iterate over permutations
+    for perm in permutations(other_cities):
+        #Unpack the permutations of the remaining cities after the starting city at index zero
+        candidate_path = [start, *perm]
+
+        current_distance = distance(candidate_path)
+
+        if current_distance < shortest_distance:
             shortest_distance = current_distance
-    
-    shortest_path.append(shortest_path[0])
+            # Copy so we do not mutate the same list later
+            shortest_path = list(candidate_path)
+
+    # Close the loop for output: repeat the start at the end
+    shortest_path.append(start)
 
     return shortest_path
-
-def print_cities(list: list[City]):
-    for i in range(0, len(list)):
-        print(list[i].identifier)
-
-def main():
-    cities = generate_cities(10)
-    for i in range(0, len(cities)):
-        print(f"({cities[i].x}, {cities[i].y})")
-    
-    path = determine_optimal_path(cities)
-
-    print_cities(path)
-
-if __name__ == "__main__":
-    main()
